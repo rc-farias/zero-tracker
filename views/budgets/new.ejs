@@ -1,0 +1,41 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="row">
+    <div class="card col-6 offset-3">
+        <div class="card-header text-center">Add A New Budget</div>
+
+        <div class="card-body">
+        <!-- <h1 class="text-center">Budget reference</h1> -->
+        <!-- <h5 class="card-title">Budget reference</h5> -->
+
+            <div class="col-6 offset-3">
+                <form action="/budgets" method="post" novalidate class="validated-form">
+                    <div class="mb-3">
+                        <label class="form-label" for="name">Budget Name</label>
+                        <input class="form-control needs-validation" type="text" name="budget[name]" id="name" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <label class="form-label" for="netIncome">Net Income</label>
+                        <input class="form-control needs-validation" type="text" name="budget[netIncome]" id="netIncome" placeholder="0.00" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <label class="form-label" for="name">Budgeted Expenses</label>
+                        <!-- <input type="text" name="transaction[amount]" id="amount" class="form-control" placeholder="0.00" aria-label="amount" aria-describedby="amount-label" required> -->
+                        <input class="form-control needs-validation" type="text" name="budget[budgetedExpenses]" id="budgetedExpenses" placeholder="0.00" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <button class="btn btn-success">Add Budget</button>
+                    </div>
+                </form>
+                <a href="/budgets">Cancel</a>
+            </div>
+
+        </div>
+    </div>
+</div>

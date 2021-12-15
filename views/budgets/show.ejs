@@ -1,0 +1,165 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6 ">
+            <div class="card mb-3 text-center">
+                <div class="card-body">
+                    <h2 class="card-title fw-bold"><%=budget.name%></h2>
+                </div>
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item d-flex justify-content-center align-items-center col-6">
+                        <div class="ms-2">
+                            <div class="fw-bold">Net Income</div>
+                            $ <%=budget.netIncome%>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-center align-items-center col-6">
+                        <div class="ms-2">
+                            <div class="fw-bold">Budgeted Expenses</div>
+                            $ <%=budget.budgetedExpenses%>
+                        </div>
+                    </li>  
+                </ul>
+
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item d-flex justify-content-center align-items-center col-6">
+                        <div class="ms-2">
+                            <div class="fw-bold">Total Expenses</div>
+                            $ <%=budget.totalExpenses%>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-center align-items-center col-6">
+                        <div class="ms-2">
+                            <div class="fw-bold ">Left to spend</div>
+                            $ <%= ( budget.totalExpenses <= budget.budgetedExpenses ) ? (budget.budgetedExpenses - budget.totalExpenses) : 0 %>
+                        </div>
+                    </li>  
+                </ul>                     
+
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item d-flex justify-content-center align-items-center col-6">
+                        <div class="ms-2">
+                            <div class="fw-bold">Total Savings</div>
+                            $ <%= budget.totalSavings %>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-center align-items-center col-6">
+                        <div class="ms-2">
+                            <div class="fw-bold">Balance</div>
+                            $ <%=  budget.balance %> 
+                        </div>
+                    </li>
+                </ul>       
+                <div class="card-body">
+                    <a href="/budgets/<%= budget._id %>/edit" class="card-link btn btn-info">Edit</a>
+                    <form class="d-inline" action="/budgets/<%=budget._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger ">Delete</button>
+                    </form>
+                </div>
+
+                <div class="card-footer text-muted">
+                    <a class="btn btn-outline-dark btn-sm" href="/budgets">Back to all budgets</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <h2 class="text-center">Add a new transaction</h2>
+            <form class="mb-3 validated-form" action="/budgets/<%= budget._id %>/transactions" method="post" novalidate>
+
+                <div class="mb-3">
+                    <label class="form-label" for="type">Trasype</label>
+                    <select class="form-select" name="transaction[type]" aria-label="type" id="type" required>
+                        <option>Trasanction type</option>
+                        <% for(let type of transactionTypes) {%>
+                            <option value="<%= type %>"><%= type %></option> 
+                        <% } %> 
+                    </select>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div> 
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="type">Trasype</label>
+                    <select class="form-select" name="transaction[category]" aria-label="category" id="type" required>
+                        <option>Trasanction category</option>
+                        <%  %> 
+                        <% for(let category of transactionCategories) {%>
+                            <option value="<%= category %>"><%= category %></option> 
+                        <% } %> 
+                    </select>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div> 
+                </div>
+
+                <div class="row mb-3">       
+                    <div class="col">
+                        <label class="form-label" for="amount">Amount</label>    
+                        <div class="input-group">
+                            <span class="input-group-text" id="amount-label">$</span>
+                            <input type="text" name="transaction[amount]" id="amount" class="form-control" placeholder="0.00" aria-label="amount" aria-describedby="amount-label" required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>    
+                        </div>    
+                    </div>  
+                    <div class="col"> 
+                        <label class="form-label" for="date">Date</label> 
+                        <input type="text" name="transaction[date]" id="date" class="form-control" placeholder="YYYY-MM-DD" aria-label="date" aria-describedby="date-label" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>                
+                                        
+                </div>  
+
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <input class="form-control" type="text" name="transaction[description]" id="description" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <button class="btn btn-primary col-12 mb-3">Create Transaction</button>
+            </form>
+        </div>  
+    </div>
+    <div class="row">       
+        <h2 class="text-center">Transactions</h2>
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col">Description</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (budget.transactions.length) {%> 
+                        <% for(let t of budget.transactions) { %> 
+                        <tr>
+                            <td class="col"><%= t.description %></td>
+                            <td class="col"><%= t.type %></td>
+                            <td class="col"><%= t.category %></td>
+                            <td class="col">$<%= t.amount.toFixed(2) %></td>
+                            <td class="col"><%= t.date.toUTCString().slice(0,16) %></td>
+                            <td class="col">
+                                <form action="/budgets/<%=budget._id%>/transactions/<%= t._id %>?_method=DELETE" method="POST">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                            </td>
+                        </tr>
+                        <% } } %> 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

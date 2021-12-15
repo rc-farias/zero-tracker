@@ -1,0 +1,43 @@
+<% layout('layouts/boilerplate') %>
+<div class="container-fluid"></div>
+  <h1 class="text-center">All Your Budgets</h1>
+
+  <p class="text-center">
+    Easily keep track of your finances by creating personalized monthly budgets. <br>
+    Give it a customized name, set your budgeted income and expenses, and stay in charge while tracking your expenses. 
+  </p>
+</div>
+
+<div>
+  <a class="btn btn-outline-dark btn-sm" href="/budgets/new" role="button">Add Budget</a>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover text-center">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Net Income</th>
+        <th scope="col">Budgeted Expenses</th>
+        <th scope="col">Total Expenses</th>
+        <th scope="col">Total Savings</th>
+        <th scope="col">Balance</th>
+      </tr>
+    </thead> 
+    <tbody>
+      <% let rowCount = 1 %> 
+      <% for(let b of budgets) { %> 
+      <tr class=<%= b.balance >= 0 ? "table-success" : "table-danger" %> >
+        <th scope="row"><%= rowCount++ %> </th>
+        <td><a href="/budgets/<%=b._id%>"><%= b.name %></a></td>
+        <td>$<%= b.netIncome %></td>
+        <td>$<%= b.budgetedExpenses %></td>
+        <td>$<%= b.totalExpenses %></td>
+        <td>$<%= b.totalSavings %></td>
+        <td>$<%= b.balance %></td>
+      </tr>
+      <% } %> 
+    </tbody>
+  </table>
+</div>
